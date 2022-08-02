@@ -1,0 +1,4 @@
+- puoi cliccare e aggiungere un circleMarker sulla posizione che preferisci
+- il popup ti indica la posizione del marker
+- puoi mettere solo un marker per volta
+- il tasto "salva prenotazione" dovra poi calcolare un are quadrata con lato pari al diametro del cerchio ma dobbiamo aspettare Emanuele per l'effettiva metratura minima
