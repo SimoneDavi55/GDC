@@ -1,0 +1,52 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"> 
+<head> 
+<title></title> 
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+<link rel="stylesheet" href="./src/leaflet-search.css" />
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link rel="stylesheet" href="styleTest.css" />
+<style>
+.search-input {
+	font-family:Courier
+}
+.search-input,
+.leaflet-control-search {
+	max-width:400px;
+}
+</style>
+</head>
+
+<body>
+<div id="map"></div>
+
+<script type="text/javascript" src="./src/leaflet-search.js"></script>
+
+<script type="text/javascript" src="./src/init.js"></script>
+<script type="text/javascript">
+
+	var map = new L.Map('map', {zoom: 18, center: new L.latLng([44.42447050979073,8.817488551139833]) });
+	map.addLayer(new L.TileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'));	//base layer
+	
+	map.addControl( new L.Control.Search({
+		url: 'https://nominatim.openstreetmap.org/search?format=json&q={s}',
+		jsonpParam: 'json_callback',
+		propertyName: 'display_name',
+		propertyLoc: ['lat','lon'],
+		marker: L.circleMarker([0,0],{radius:1}),
+		autoCollapse: true,
+		autoType: false,
+		minLength: 2
+	}) );
+
+	PASSMAP.init=([map]);
+
+</script>
+<script type="text/javascript" src="./src/script.js"></script>
+<div class="marker-position">click on the map, move the marker, click on the marker</div>
+
+
+</body>
+</html>
