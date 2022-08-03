@@ -1,4 +1,4 @@
-*Funzioni*
+**Funzioni index**
 
 - puoi cliccare e aggiungere un circleMarker sulla posizione che preferisci
 - il popup ti indica la posizione del marker
