@@ -1,20 +1,46 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html> 
+<html> 
+<head> 
+<title>Versione Marker e Ricerca Citta</title> 
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+	<link rel="stylesheet" href="./src/leaflet-search.css" />
+	<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<link rel="stylesheet" href="style.css" />
+<style>
+	.search-input {
+		font-family:Courier
+	}
+	.search-input,
+	.leaflet-control-search {
+		max-width:400px;
+	}
+</style>
+</head>
 
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add move and delete marker</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <link rel="stylesheet" href="style.css">
-  </head>
+<body>
+	<div id="map"></div>
 
-  <body>
-    <div class="marker-position">click on the map, move the marker, click on the marker</div>
-    <div id="map"></div>
-    <script src="script.js"></script>
-  </body>
+	<script type="text/javascript" src="./src/leaflet-search.js"></script>
+	<script type="text/javascript">
 
+		var map = new L.Map('map', {zoom: 18, center: new L.latLng([44.42447050979073,8.817488551139833]) });
+		map.addLayer(new L.TileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'));
+		
+		map.addControl( new L.Control.Search({
+			url: 'https://nominatim.openstreetmap.org/search?format=json&q={s}',
+			jsonpParam: 'json_callback',
+			propertyName: 'display_name',
+			propertyLoc: ['lat','lon'],
+			marker: L.circleMarker([0,0],{radius:1}),
+			autoCollapse: true,
+			autoType: false,
+			minLength: 2
+		}) );
+
+	</script>
+
+
+</body>
 </html>

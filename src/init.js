@@ -4,7 +4,6 @@ var PASSMAP = PASSMAP || (function(){
     return {
         init : function(Args) {
             _args = Args;
-            // some other initialising
         },
         getMap : function(i) {
             return _args[i];

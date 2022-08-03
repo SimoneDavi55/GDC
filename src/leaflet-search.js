@@ -36,6 +36,19 @@
 //	in this way every record can have a free structure of attributes, only 'loc' is required
 
 
+var circleReservation;
+var markerReservation;
+var flagReservation=true;
+// calling map
+
+const radiusReservation = 10;
+
+const markOne = L.latLng(44.42447050979073, 8.817488551139833);
+const markTwo = L.latLng(44.424483073543385, 8.817740678787233);
+const markThree = L.latLng(44.424620917453346, 8.816753625869753);
+const markFour = L.latLng(44.42436437436044, 8.818368315696718);
+
+const fakeDB = [markOne, markTwo, markThree, markFour];
 
 
   
@@ -164,6 +177,10 @@ L.Control.Search = L.Control.extend({
 			// 		'layerremove': this._onLayerAddRemove
 			'resize': this._handleAutoresize
 			}, this);
+
+		PlaceReserved();
+
+		map.on("click", addMarker);
 			
 		return this._container;
 	},
@@ -1018,5 +1035,102 @@ return L.Control.Search;
 
 });
 
-	
 
+function PlaceReserved() {
+  
+	for (let i = 0; i < fakeDB.length;i++)
+	{
+	  circle = new L.circle(fakeDB[i], {
+		radius: radiusReservation,
+		color: 'green',
+	  })
+		.addTo(map); 
+	}
+  }
+	
+  function addMarker(e) {  
+  
+	/*$.get("https://www.openstreetmap.org/query?lat="+e.latlng.lat+"&lon="+e.latlng.lng, function(data){
+	  console.log(data);
+   });*/
+  
+	var popupText = `<p>Posizione = </p> <p>${e.latlng.lat}</p> <p>${e.latlng.lng}</p> <button type="button" class="remove">Cancella Posizione</button> <button type="button" class="save">Salva Posizione</button>`;
+  
+  
+	if(isPlaceable() && isBeach(e) && isInFreeSpace(e.latlng))
+	{
+	  circleReservation = new L.circle(e.latlng, {
+	  
+	  radius: radiusReservation,
+	})
+	  .addTo(map);    
+  
+	  markerReservation = new L.marker(e.latlng)
+		.bindPopup(popupText)
+		.addTo(map)
+		.on("popupopen", removeGroup)
+		.on("popupopen", savePos);
+  
+	  flag=false;
+	}
+  }
+  
+  function isInFreeSpace(latlng)
+  {
+	if (getNearestReservedSpaces(latlng) <= radiusReservation*2 )
+	{
+	  alert("Sei troppo vicino ad un altro marker, piazzati almeno a "+radiusReservation*2+" m");
+	  return false;
+	}
+	else return true;
+  }
+  
+  function getNearestReservedSpaces(latlng)
+  {
+	var startingPoint = latlng;
+	var distMin = startingPoint.distanceTo(fakeDB[0]);
+	for (var i = 1; i < fakeDB.length;i++)
+	{
+	  if (distMin>startingPoint.distanceTo(fakeDB[i]))
+	  {
+		distMin = startingPoint.distanceTo(fakeDB[i]);
+		nearestPos = fakeDB[i];
+	  }
+	}
+	return distMin;
+  }
+  
+  function isBeach(e)
+  {
+	//TODO
+	return true;
+  }
+  
+  function isPlaceable ()
+  {
+	return flagReservation;
+  }
+  
+  
+  
+  // remove marker
+  function removeGroup() {
+	const btn = document.querySelector(".remove");
+	btn.addEventListener("click", 
+	function () 
+	{
+	  map.removeLayer(circleReservation);
+	  map.removeLayer(markerReservation);
+	  flagReservation=true;
+	});
+  }
+  
+  function savePos() {
+	const btn = document.querySelector(".save");
+	btn.addEventListener("click", 
+	function () 
+	{
+	  //Mando i dati da qualche parte
+	});
+  }
+  

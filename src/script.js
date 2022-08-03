@@ -3,10 +3,6 @@
  * add move and delete marker
  */
 
-import PASSMAP from "./init.js";
-
-var map = PASSMAP.getMap(0);
-
 var circle;
 var marker;
 var flag=true;
