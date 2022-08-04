@@ -36,12 +36,30 @@
 //	in this way every record can have a free structure of attributes, only 'loc' is required
 
 
+const radiusReservation = 10;
+
+var geojsonLayer = new L.GeoJSON.AJAX("./GeoJson/spiagge.geojson", 
+{
+	onEachFeature: function (feature, layer) {
+        layer.setStyle({
+			color :'#F8AD03',
+			weight: 1,
+		}); 
+    },
+	pointToLayer : function(feature, latlng) {
+		return L.circleMarker(latlng, {
+			radius : radiusReservation,
+			color : "#F8AD03",
+			weight: 1,
+		});
+	}
+});
+
 var circleReservation;
 var markerReservation;
 var flagReservation=true;
 // calling map
 
-const radiusReservation = 10;
 
 const markOne = L.latLng(44.42447050979073, 8.817488551139833);
 const markTwo = L.latLng(44.424483073543385, 8.817740678787233);
@@ -179,8 +197,11 @@ L.Control.Search = L.Control.extend({
 			}, this);
 
 		PlaceReserved();
-
-		map.on("click", addMarker);
+		ReplaceMarkerWithCircles();
+		
+		geojsonLayer.addTo(map);
+		geojsonLayer.on("click", addMarker);
+		
 			
 		return this._container;
 	},
@@ -1042,7 +1063,7 @@ function PlaceReserved() {
 	{
 	  circle = new L.circle(fakeDB[i], {
 		radius: radiusReservation,
-		color: 'green',
+		color: '#128DC5',
 	  })
 		.addTo(map); 
 	}
@@ -1050,28 +1071,24 @@ function PlaceReserved() {
 	
   function addMarker(e) {  
   
-	/*$.get("https://www.openstreetmap.org/query?lat="+e.latlng.lat+"&lon="+e.latlng.lng, function(data){
-	  console.log(data);
-   });*/
-  
 	var popupText = `<p>Posizione = </p> <p>${e.latlng.lat}</p> <p>${e.latlng.lng}</p> <button type="button" class="remove">Cancella Posizione</button> <button type="button" class="save">Salva Posizione</button>`;
   
-  
-	if(isPlaceable() && isBeach(e) && isInFreeSpace(e.latlng))
+	if(isPlaceable() && isInFreeSpace(e.latlng))
 	{
-	  circleReservation = new L.circle(e.latlng, {
-	  
-	  radius: radiusReservation,
-	})
-	  .addTo(map);    
-  
-	  markerReservation = new L.marker(e.latlng)
-		.bindPopup(popupText)
-		.addTo(map)
-		.on("popupopen", removeGroup)
-		.on("popupopen", savePos);
-  
-	  flag=false;
+		circleReservation = new L.circle(e.latlng, {
+		  
+			radius: radiusReservation,
+			color: '#F8AD03',
+		  })
+			.addTo(map);    
+		
+		markerReservation = new L.marker(e.latlng)
+			  .bindPopup(popupText)
+			  .addTo(map)
+			  .on("popupopen", removeGroup)
+			  .on("popupopen", savePos);
+		
+			flagReservation=false;
 	}
   }
   
@@ -1099,18 +1116,11 @@ function PlaceReserved() {
 	}
 	return distMin;
   }
-  
-  function isBeach(e)
-  {
-	//TODO
-	return true;
-  }
-  
+
   function isPlaceable ()
   {
 	return flagReservation;
   }
-  
   
   
   // remove marker
@@ -1132,5 +1142,23 @@ function PlaceReserved() {
 	{
 	  //Mando i dati da qualche parte
 	});
+  }
+
+  function ReplaceMarkerWithCircles()
+  {
+	$.ajax("data/StatesPopulation.geojson", {
+		dataType: "json",
+		success: function(response) {
+		  L.geoJson(response, {
+			pointToLayer: function(feature, latlng) {
+			  return new L.CircleMarker(latlng, {
+				radius: radiusReservation,
+				color: '#F8AD03'
+			  });
+			},
+			onEachFeature: onEachFeature
+		  }).addTo(map);
+		}
+	  });
   }
   
