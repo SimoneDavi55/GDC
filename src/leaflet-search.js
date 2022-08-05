@@ -47,10 +47,9 @@ var geojsonLayer = new L.GeoJSON.AJAX("./GeoJson/spiagge.geojson",
 		}); 
     },
 	pointToLayer : function(feature, latlng) {
-		return L.circleMarker(latlng, {
+		return L.circle(latlng, {
 			radius : radiusReservation,
 			color : "#F8AD03",
-			weight: 1,
 		});
 	}
 });
