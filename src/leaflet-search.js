@@ -197,7 +197,6 @@ L.Control.Search = L.Control.extend({
 			}, this);
 
 		PlaceReserved();
-		ReplaceMarkerWithCircles();
 		
 		geojsonLayer.addTo(map);
 		geojsonLayer.on("click", addMarker);
@@ -1142,23 +1141,5 @@ function PlaceReserved() {
 	{
 	  //Mando i dati da qualche parte
 	});
-  }
-
-  function ReplaceMarkerWithCircles()
-  {
-	$.ajax("data/StatesPopulation.geojson", {
-		dataType: "json",
-		success: function(response) {
-		  L.geoJson(response, {
-			pointToLayer: function(feature, latlng) {
-			  return new L.CircleMarker(latlng, {
-				radius: radiusReservation,
-				color: '#F8AD03'
-			  });
-			},
-			onEachFeature: onEachFeature
-		  }).addTo(map);
-		}
-	  });
   }
   

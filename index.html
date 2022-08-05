@@ -27,10 +27,16 @@
 	.leaflet-control-search {
 		max-width:400px;
 	}
+	div.relative {
+  	position: relative;
+  	left: 30px;
+  	border: 3px solid #F8AD03;
+}
 </style>
 </head>
 
 <body>
+	<div id="search" style="position: relative ;"></div>
 	<div id="map"></div>
 
 	<script type="text/javascript" src="./src/leaflet-search.js"></script>
@@ -41,6 +47,7 @@
 		
 		map.addControl( new L.Control.Search({
 			url: 'https://nominatim.openstreetmap.org/search?format=json&q={s}',
+			container:'search',
 			jsonpParam: 'json_callback',
 			propertyName: 'display_name',
 			propertyLoc: ['lat','lon'],
@@ -51,6 +58,7 @@
 		}) );
 
 	</script>
+	
 
 
 </body>
