@@ -1095,8 +1095,9 @@ function PlaceReserved() {
 		  })
 			.addTo(map);    
 
-			marker = new L.marker(currentElement[0], {icon: IconMarker, autoPan: false}).addTo(map).bindPopup(popupText);
+			marker = new L.marker(currentElement[0], {icon: IconMarker}).addTo(map).bindPopup(popupText);
 
 	}
+	
   }
 	
