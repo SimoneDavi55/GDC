@@ -26,7 +26,7 @@ function PlaceReserved() {
   {
     circle = new L.circle(fakeDB[i], {
       radius: radius,
-      color: 'green',
+      color: '#F8AD03',
     })
       .addTo(map); 
   }
