@@ -38,6 +38,8 @@
 
 const radiusReservation = 10;
 
+var reservations = new L.layerGroup();
+
 var geojsonLayer = new L.GeoJSON.AJAX("./GeoJson/spiagge.geojson", 
 {
 	onEachFeature: function (feature, layer) {
@@ -54,10 +56,18 @@ var geojsonLayer = new L.GeoJSON.AJAX("./GeoJson/spiagge.geojson",
 	}
 });
 
-var circleReservation;
-var markerReservation;
-var flagReservation=true;
-// calling map
+var a = 40;
+var b = 80;
+
+var LeafIcon = L.Icon.extend({
+	options: {
+		iconSize:     [a, b],
+		popupAnchor: [0, -40],
+	}
+});
+
+var IconMarker = new LeafIcon({iconUrl: '/GDC/src/images/marker.png'});
+
 
 
 const markOnePos = L.latLng(44.42447050979073, 8.817488551139833);
@@ -211,6 +221,18 @@ L.Control.Search = L.Control.extend({
 			}, this);
 
 		PlaceReserved();
+		map.addLayer(reservations);
+
+		map.on('zoomend', function (e)
+		{
+			if (map.getZoom()>13)
+			{
+				map.addLayer(reservations);
+			}
+			else map.removeLayer(reservations);
+			
+		});
+		
 		geojsonLayer.addTo(map);
 		
 			
@@ -1067,18 +1089,6 @@ return L.Control.Search;
 
 });
 
-
-
-var LeafIcon = L.Icon.extend({
-	options: {
-		iconSize:     [40, 80],
-		popupAnchor: [0, -40],
-	}
-});
-
-var IconMarker = new LeafIcon({iconUrl: '/GDC/src/images/marker.png'});
-
-
 function PlaceReserved() {
 
 	
@@ -1093,9 +1103,9 @@ function PlaceReserved() {
 			radius: radiusReservation,
 			color: '#F8AD03',
 		  })
-			.addTo(map);    
+			.addTo(reservations);    
 
-			marker = new L.marker(currentElement[0], {icon: IconMarker}).addTo(map).bindPopup(popupText);
+			marker = new L.marker(currentElement[0], {icon: IconMarker}).addTo(reservations).bindPopup(popupText);
 
 	}
 	
