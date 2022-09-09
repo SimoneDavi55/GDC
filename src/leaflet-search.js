@@ -1069,7 +1069,7 @@ function PlaceReserved() {
 	
   function addMarker(e) {  
   
-	var popupText = `<p>Posizione = </p> <p>${e.latlng.lat}</p> <p>${e.latlng.lng}</p> <button type="button" class="remove">Cancella Posizione</button> <button type="button" class="save">Salva Posizione</button>`;
+	var popupText = `<p>Posizione = </p> <p>${e.latlng.lat}</p> <p>${e.latlng.lng}</p> <button type="button" class="remove">Cancella Posizione Attuale</button> <button type="button" class="save">Adotta questa spiaggia</button>`;
   
 	if(isPlaceable() && isInFreeSpace(e.latlng))
 	{
@@ -1084,7 +1084,8 @@ function PlaceReserved() {
 			  .bindPopup(popupText)
 			  .addTo(map)
 			  .on("popupopen", removeGroup)
-			  .on("popupopen", savePos);
+			  .on("popupopen", savePos)
+			  .openPopup(popupText);
 		
 			flagReservation=false;
 	}
